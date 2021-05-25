@@ -143,9 +143,9 @@ void StrVec::reallocate(unsigned int newcapacity){
     5. 更新对象数据
     */
    //1.
-   if (!newcapacity)
+   if (!newcapacity)//如果未指定重新分配多大的内存，则扩大两倍。指定的内存应大于cap
    {
-        newcapacity = size()%2? 2*size():1;
+        newcapacity = capacity()%2? 2*capacity():1;
    }
    //2.
    auto newdest = alloc.allocate(newcapacity);

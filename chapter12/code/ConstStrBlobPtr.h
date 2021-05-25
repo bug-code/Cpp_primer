@@ -14,9 +14,18 @@ public:
     ConstStrBlobPtr(const StrBlob &a , size_t sz=0):wptr(a.data),curr(sz){}
     //解引用
     string& deref()const;
+    const string& operator*()const;
+    const string* operator->()const;
     size_t& getcurr(){return curr;}
     //前缀递增
     StrBlobPtr& incr();
     ~ConstStrBlobPtr()=default;
 };
+inline const string& ConstStrBlobPtr::operator*()const{
+    auto p = check(curr , "out of range");
+    return (*p)[curr];
+} 
+inline const string* ConstStrBlobPtr::operator->()const{
+    return & this->operator*();
+}
 #endif

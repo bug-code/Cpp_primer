@@ -34,6 +34,16 @@ bool operator!=(const StrBlob& lhs, const StrBlob& rhs){
     return !operator==(lhs , rhs);
 }
 
+bool operator<(const StrBlob& lhs , const StrBlob& rhs){
+    for (auto beg1  = lhs.data->cbegin() , beg2 = rhs.data->cbegin() , en1 = lhs.data->cend()  , en2  = rhs.data->cend(); beg1!=en1&&beg2!=en2; ++beg1 , ++beg2)
+    {
+        if (*beg1!=*beg2)
+        {
+            return *beg1<*beg2;
+        }
+    }
+    return lhs.size()<rhs.size();
+}
 
 inline StrBlob::StrBlob(initializer_list<string> il):data(make_shared<vector<string>>(il)){}
 inline void StrBlob::check(vector<string>::size_type i , const string &msg)const{
