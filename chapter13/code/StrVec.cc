@@ -1,4 +1,42 @@
 #include "StrVec.h"
+
+/*重载运算符*/
+bool operator==(const StrVec& lhs , const  StrVec& rhs){
+    bool flag = true;
+    if (lhs.size()==rhs.size())
+    {
+        auto beg1=lhs.cbegin() , beg2=rhs.cbegin();
+        for (size_t i = 0; i < lhs.size(); ++i)
+        {
+            if (*beg1 != *beg2)
+            {
+                flag=false;
+                break;
+            }
+        }
+    }
+    else{
+        flag=false;
+    }
+    return flag;
+}
+bool operator!=(const StrVec& lhs , const StrVec& rhs){
+    return operator==(lhs , rhs);
+}
+
+bool operator<(const StrVec& lhs, const StrVec& rhs){
+    //先按字符顺序比较，再按容器大小比较
+    for (auto beg1=lhs.cbegin() , beg2 = rhs.cbegin() , en1 = lhs.cend() , en2=rhs.cend(); beg1!=en1 && beg2!=en2; ++beg1 ,++beg2)
+    {
+        if (*beg1!=*beg2)
+        {
+            return *beg1 < *beg2;
+        }
+    }
+    return lhs.size() < rhs.size();
+}
+
+
 //类外静态对象定义
 std::allocator<std::string> StrVec::alloc;
 
@@ -57,6 +95,16 @@ StrVec& StrVec::operator=(StrVec &&v)noexcept{
     return *this;
 }
 
+/*类型转换赋值运算符 练习14.23*/
+StrVec& StrVec::operator=(const std::initializer_list<std::string>& ilst){
+    StrVec tmp(ilst);
+    elements = tmp.elements;
+    first_free = tmp.first_free;
+    cap = tmp.cap;
+    return *this;
+}
+
+
 //析构函数
 StrVec::~StrVec(){
     free();
@@ -65,6 +113,12 @@ StrVec::~StrVec(){
 void StrVec::push_back(const std::string& s){
     chk_n_alloc();
     alloc.construct(first_free++ ,s );
+}
+
+/*练习16.58*/
+template<typename ... Args> inline void StrVec::emplace_back(Args&&...args){
+    chk_n_alloc();
+    alloc.construct(first_free++  , std::forward<Args>(args)...);
 }
 
 void StrVec::pop_back(){
@@ -97,14 +151,16 @@ void StrVec::resize(const size_t& n ,const std::string s){//针对的是元素�
     }
     else if ( n >size() && n<=capacity() )//内存足够
     {
-        while (n-size())
+        auto sz = n-size();
+        while (sz--)
         {
             push_back(s);
         }
     }
     else
     {
-        while (size()-n)
+        auto sz = size()-n;
+        while (sz--)
         {
             pop_back();
         }
@@ -115,11 +171,11 @@ size_t StrVec::capacity()const{
    return  cap-elements;
 }
 
-const std::string* StrVec::cbegin()const{
+std::string* StrVec::cbegin()const{
      
     return elements;
 }
-const std::string* StrVec::cend()const{
+std::string* StrVec::cend()const{
 
     return first_free;
 }

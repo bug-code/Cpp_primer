@@ -8,6 +8,9 @@
 #include <algorithm>
 class StrVec
 {
+    friend bool operator==(const StrVec& , const StrVec& );
+    friend bool operator!=(const StrVec& , const StrVec& );
+    friend bool operator<(const StrVec& , const StrVec&);
 private:
     //类内静态对象声明
     static std::allocator<std::string> alloc;
@@ -31,16 +34,22 @@ public:
     StrVec& swap(StrVec&);
     StrVec& operator=(StrVec);
     StrVec& operator=(StrVec &&)noexcept;
+    StrVec& operator=(const std::initializer_list<std::string>& ilst);
+    /*练习14.26*/
+    std::string& operator[](const size_t& n){ return elements[n];}
+    const std::string& operator[](const size_t& n)const{return elements[n];}
     ~StrVec();
     void push_back(const std::string&);
+    /*练习16.58*/
+    template<typename ... Agrs> void emplace_back(Agrs&&... args);
     void pop_back();
     size_t size()const;
     size_t capacity()const;
     void reserve(const size_t& n);
     void resize(const size_t& , const std::string );
-    std::string *begin();
-    std::string *end();
-    const std::string *cbegin()const;
-    const std::string *cend()const;
+    std::string* begin();
+    std::string* end();
+    std::string* cbegin()const;
+    std::string* cend()const;
 };
 #endif

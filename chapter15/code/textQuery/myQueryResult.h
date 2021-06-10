@@ -20,18 +20,8 @@ private:
     shared_ptr<set<size_t>> LineSet;
     string str;
 public:
-    myQueryResult(const myTextQuery &mTQ):
-                                        spTextLine(mTQ.lineVec),wordLineSet( mTQ.wordLine ){};
-    // /*拷贝构造函数*/
-    // myQueryResult(const myQueryResult &mTR):spTextLine(mTR.spTextLine) , 
-    //                                         wordLineSet(mTR.wordLineSet),LineSet(LineSet),str(mTR.str){}
-    // /*赋值运算符*/
-    // myQueryResult& operator=(const myQueryResult& mQR){
-    //     spTextLine = mQR.spTextLine;
-    //     wordLineSet=mQR.wordLineSet;
-    //     LineSet=mQR.LineSet;
-    //     str=mQR.str;
-    // }
+    myQueryResult(const myTextQuery &mTQ , const shared_ptr<set<size_t>>& LS = nullptr , const string& s=""):
+                                        spTextLine(mTQ.lineVec),wordLineSet( mTQ.wordLine ) , LineSet(LS) , str(s){};
     void query(const string &s);
     void print();
     /*练习12.33*/

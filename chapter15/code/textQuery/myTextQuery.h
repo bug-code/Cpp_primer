@@ -9,7 +9,6 @@
 #include <utility>
 #include <memory>
 #include <new>
-#include "DebugDelete.h"
 // #include "StrBlob.cc"
 using std::map;
 using std::set;
@@ -25,26 +24,18 @@ class myQueryResult;
 class myTextQuery
 {
 private:
-    shared_ptr<vector<string> >  lineVec;
-    
+    shared_ptr<vector<string>>  lineVec;
     // StrBlob lineVec;///*strblob类*/
-    shared_ptr<map<string,set<size_t>> >  wordLine;
+    shared_ptr<map<string,set<size_t>>>  wordLine;
 public:
     friend class myQueryResult;
     myTextQuery(istream &is);
-    //不需要定义可用编译器自生成的
-    // /*拷贝构造函数*/
-    // myTextQuery(const myTextQuery& mTQ):lineVec(mTQ.lineVec),wordLine(mTQ.wordLine){}
-    // /*赋值构造函数*/
-    // myTextQuery& operator=(const myTextQuery& mTQ){
-    //     lineVec=mTQ.lineVec;
-    //     wordLine=mTQ.wordLine;
-    // }
+    size_t text_Line_size()const{return lineVec->size();}
+
 };
 myTextQuery::myTextQuery(istream &is):
-/*DebugDelete 练习16.22*/
-lineVec(new vector<string> , DebugDelete()),
-wordLine(new map<string,set<size_t>> , DebugDelete())
+lineVec(new vector<string>),
+wordLine(new map<string,set<size_t>>)
 {
     string line;
     static size_t LineNum=0;
